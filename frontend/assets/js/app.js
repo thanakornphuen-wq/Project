@@ -1,20 +1,59 @@
 const API_URL = "http://localhost:8000";
 
-// ประกาศฟังก์ชันให้ตรงกับที่เรียกใน HTML
+// ผูก event listener หลัง DOM โหลดเสร็จ (ปลอดภัยกว่า onclick ใน HTML)
+document.addEventListener("DOMContentLoaded", () => {
+    const submitBtn = document.getElementById("submitBtn");
+    if (submitBtn) {
+        submitBtn.addEventListener("click", (e) => {
+            e.preventDefault(); // กัน browser ทำ default action ทุกกรณี
+            sendComplaint();
+        });
+    }
+
+    // กัน form submit ด้วย Enter หรือ Go Live trigger
+    const form = document.getElementById("complaintForm");
+    if (form) {
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            sendComplaint();
+        });
+    }
+});
+
 async function sendComplaint() {
     const submitBtn = document.getElementById("submitBtn");
     const msgDiv = document.getElementById("responseMessage");
     const complaintForm = document.getElementById("complaintForm");
 
-    // 1. ล็อกปุ่มและเตรียมสถานะ
+    // ซ่อน message เก่าก่อน
+    msgDiv.style.display = "none";
+    msgDiv.innerHTML = "";
+
+    // ── 1. Validate ฝั่ง Frontend ก่อนส่งเลย ──
+    const title = document.getElementById("title").value.trim();
+    const description = document.getElementById("description").value.trim();
+
+    if (!title && !description) {
+        showMessage(msgDiv, "⚠️ กรุณากรอกหัวข้อเรื่องและรายละเอียดให้ครบก่อนส่ง", "error");
+        return;
+    }
+    if (!title) {
+        showMessage(msgDiv, "⚠️ กรุณากรอก หัวข้อเรื่อง ให้ครบก่อนส่ง", "error");
+        return;
+    }
+    if (!description) {
+        showMessage(msgDiv, "⚠️ กรุณากรอก รายละเอียด ให้ครบก่อนส่ง", "error");
+        return;
+    }
+
+    // ── 2. ล็อกปุ่มและเตรียมส่ง ──
     submitBtn.disabled = true;
     submitBtn.innerText = "⏳ กำลังส่งข้อมูล...";
-    msgDiv.style.display = "none";
 
-    // 2. เตรียมข้อมูล (ใช้ FormData เพราะมีรูปภาพ)
+    // ── 3. เตรียม FormData ──
     const formData = new FormData();
-    formData.append("title", document.getElementById("title").value);
-    formData.append("description", document.getElementById("description").value);
+    formData.append("title", title);
+    formData.append("description", description);
     formData.append("user_id", 1);
     formData.append("category_id", 1);
     formData.append("location", "กรุงเทพ");
@@ -32,29 +71,51 @@ async function sendComplaint() {
             // ห้ามใส่ Content-Type Header เด็ดขาดเมื่อใช้ FormData
         });
 
+        // อ่าน response body ทุกกรณี
+        const result = await response.json().catch(() => null);
+
         if (response.ok) {
-            // ✅ สำเร็จ: โชว์แถบเขียวค้างไว้
-            msgDiv.innerHTML = "✅ ส่งข้อมูลสำเร็จแล้วครับเพื่อน!";
-            msgDiv.className = "mt-3 msg-success";
-            msgDiv.style.display = "block";
-            
-            // ล้างฟอร์ม
+            // ✅ สำเร็จ: โชว์แถบเขียวค้างไว้ ไม่รีเฟรช
+            showMessage(msgDiv, "✅ ส่งข้อมูลแจ้งเหตุสำเร็จแล้ว!", "success");
             complaintForm.reset();
         } else {
-            // ❌ ผิดพลาดจากเซิร์ฟเวอร์
-            msgDiv.innerHTML = "❌ ส่งไม่สำเร็จ (ลองเช็คขนาดไฟล์รูป)";
-            msgDiv.className = "mt-3 msg-error";
-            msgDiv.style.display = "block";
+            // ❌ ดึง error message จาก server มาแสดงตรงๆ
+            const errMsg = result?.error || result?.message || "ส่งข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง";
+            showMessage(msgDiv, `❌ ${errMsg}`, "error");
         }
     } catch (err) {
         // ⚠️ ติดต่อเซิร์ฟเวอร์ไม่ได้
         console.error("Error:", err);
-        msgDiv.innerHTML = "⚠️ เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (เปิด Backend หรือยัง?)";
-        msgDiv.className = "mt-3 msg-error";
-        msgDiv.style.display = "block";
+        showMessage(msgDiv, "⚠️ เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (เปิด Backend หรือยัง?)", "error");
     } finally {
-        // คืนค่าปุ่ม
+        // คืนค่าปุ่มเสมอ
         submitBtn.disabled = false;
         submitBtn.innerText = "ส่งข้อมูลแจ้งเหตุ";
     }
 }
+
+// ── Helper: แสดง message แบบ reusable ──
+function showMessage(el, text, type) {
+    el.innerHTML = text;
+    el.className = `mt-3 ${type === "success" ? "msg-success" : "msg-error"}`;
+    el.style.display = "block";
+    // scroll ขึ้นไปให้เห็น message
+    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+// ผูก event ที่นี่แทน onclick inline ใน HTML — ป้องกัน form submit ได้แน่นอนกว่า
+document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.getElementById("submitBtn");
+    if (btn) {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            sendComplaint();
+        });
+    }
+
+    const form = document.getElementById("complaintForm");
+    if (form) {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+        });
+    }
+});
