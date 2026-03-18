@@ -46,8 +46,9 @@ exports.create = async (req, res) => {
             id: result.insertId 
         });
     } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+    console.error("🔥 บักอยู่ตรงนี้เพื่อน!: ", err); // เพิ่มบรรทัดนี้!!!
+    res.status(500).json({ error: err.message });
+}
 };
 
 // 4. อัปเดตสถานะ (ใหม่! สำหรับเจ้าหน้าที่)

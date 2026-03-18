@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>ระบบแจ้งปัญหาประชาชน</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .hero-section { background: #007bff; color: white; padding: 40px 0; }
+    </style>
+</head>
+<body>
+    <div class="hero-section text-center">
+        <h1>📢 ระบบแจ้งปัญหาเมือง</h1>
+        <p>ช่วยกันแจ้งปัญหา เพื่อเมืองที่น่าอยู่กว่าเดิม</p>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">แจ้งปัญหาใหม่</h4>
+                        <form id="complaintForm">
+                            <div class="mb-3">
+                                <label class="form-label">หัวข้อเรื่อง</label>
+                                <input type="text" id="title" class="form-control" placeholder="เช่น ท่อประปาแตก" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">รายละเอียด</label>
+                                <textarea id="description" class="form-control" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">แนบรูปภาพ</label>
+                                <input type="file" id="image" class="form-control" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">ส่งข้อมูล</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
