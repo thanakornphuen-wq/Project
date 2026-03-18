@@ -1,10 +1,19 @@
--- 1. ตารางหมวดหมู่ (Categories)
+-- สร้าง Database
+CREATE DATABASE IF NOT EXISTS webdb;
+USE webdb;
+
+-- ลบตารางเก่า (เรียงลำดับให้ถูกเพื่อไม่ให้ติด Foreign Key)
+DROP TABLE IF EXISTS complaints;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
+
+-- 1. ตาราง Categories
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE -- เช่น 'ไฟฟ้า', 'ประปา', 'ขยะ', 'ถนน'
+    name VARCHAR(100) NOT NULL UNIQUE
 ) ENGINE=InnoDB;
 
--- 2. ตารางผู้ใช้งาน (Users)
+-- 2. ตาราง Users
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -14,12 +23,11 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- 3. ตารางเรื่องร้องเรียน (Complaints) - จุดรวมพล
-DROP TABLE IF EXISTS complaints;
+-- 3. ตาราง Complaints
 CREATE TABLE complaints (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,               -- ใครแจ้ง (FK)
-    category_id INT,           -- แจ้งเรื่องประเภทไหน (FK)
+    user_id INT,
+    category_id INT,
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     location VARCHAR(255) NOT NULL,
@@ -27,10 +35,13 @@ CREATE TABLE complaints (
     status ENUM('pending', 'processing', 'resolved') DEFAULT 'pending',
     image_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- แถม: ใส่ข้อมูลหมวดหมู่เริ่มต้นให้เลย
-INSERT INTO categories (name) VALUES ('ไฟฟ้า'), ('ประปา'), ('ขยะ'), ('ถนน'), ('ความสะอาด');
+-- 4. ใส่ข้อมูลเริ่มต้น (Seed Data) แบบที่อาจารย์ชอบทำ
+INSERT INTO categories (name) VALUES 
+('ไฟฟ้า'), ('ประปา'), ('ขยะ'), ('ถนน'), ('ความสะอาด');
+
+INSERT INTO users (username, password, full_name, role) 
+VALUES ('admin', '1234', 'System Admin', 'admin');

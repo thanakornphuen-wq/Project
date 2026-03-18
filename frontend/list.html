@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายการแจ้งเหตุ - ระบบเมืองน่าอยู่</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* แถม CSS เฉพาะหน้าตารางให้ครับ */
+        .table-container { margin: 20px auto; max-width: 95%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background: white; border: 1px solid #ddd; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        tr:hover { background-color: #f5f5f5; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .pending { background-color: #ffc107; color: #000; }
+        .processing { background-color: #17a2b8; color: #fff; }
+        .resolved { background-color: #28a745; color: #fff; }
+        .img-preview { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 รายการแจ้งเหตุทั้งหมด</h1>
+        
+        <div style="margin: 10px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <a href="index.html" class="btn" style="background-color: #28a745; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px;">➕ แจ้งเหตุใหม่</a>
+
+            <div style="display: flex; gap: 10px; flex-grow: 1; justify-content: flex-end;">
+                <input type="text" id="searchInput" placeholder="🔍 ค้นหาหัวข้อหรือสถานที่..." 
+                       style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 250px;">
+                
+                <select id="statusFilter" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                    <option value="all">ทั้งหมด</option>
+                    <option value="pending">รอดำเนินการ</option>
+                    <option value="resolved">แก้ไขแล้ว</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>หัวข้อ/รายละเอียด</th>
+                        <th>สถานที่</th>
+                        <th>หมวดหมู่</th>
+                        <th>สถานะ</th>
+                        <th>รูปภาพ</th>
+                    </tr>
+                </thead>
+                <tbody id="complaintList">
+                    <tr>
+                        <td colspan="6" style="text-align: center;">กำลังโหลดข้อมูล...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="assets/js/list.js"></script>
+</body>
+</html>
