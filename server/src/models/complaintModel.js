@@ -4,23 +4,23 @@ const pool = require('../config/db');
 const Complaint = {
     create: async (data) => {
         const sql = `INSERT INTO complaints 
-            (user_id, category_id, title, description, location, contact_phone, image_url) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        // ส่งค่าไปให้ครบตามลำดับ
+            (user_id, title, description, image_url) 
+            VALUES (?, ?, ?, ?)`;
         const [result] = await pool.execute(sql, [
-            data.user_id || null, 
-            data.category_id || null, 
-            data.title, 
-            data.description, 
-            data.location, 
-            data.contact_phone, 
+            data.user_id || null,
+            data.title,
+            data.description,
             data.image_url
         ]);
         return result;
     },
-    // ดึงข้อมูลทั้งหมด (เพื่อให้เจ้าหน้าที่ดู)
     getAll: async () => {
-        const sql = "SELECT * FROM complaints ORDER BY created_at DESC";
+        const sql = `
+            SELECT c.*, u.full_name, u.phone_number
+            FROM complaints c
+            LEFT JOIN users u ON c.user_id = u.id
+            ORDER BY c.created_at DESC
+        `;
         const [rows] = await db.execute(sql);
         return rows;
     },

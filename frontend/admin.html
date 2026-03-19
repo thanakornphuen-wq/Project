@@ -19,10 +19,10 @@
         .overlap-container { margin-top: -50px; position: relative; z-index: 10; }
         .nav-links { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
         .btn-back {
-            background-color: #28a745; color: white; text-decoration: none;
+            background-color: #28a745; color: white !important; text-decoration: none;
             padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; transition: 0.2s;
         }
-        .btn-back:hover { background-color: #1e7e34; color: white; transform: translateY(-1px); }
+        .btn-back:hover { background-color: #1e7e34; color: white !important; transform: translateY(-1px); }
         .btn-list {
             background-color: #007bff; color: white; text-decoration: none;
             padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; transition: 0.2s;
@@ -65,13 +65,13 @@
             <div class="card-body p-4">
 
                 <div class="nav-links">
-                    <a href="index.html" class="btn-back">➕ แจ้งเหตุใหม่</a>
-                    <a href="list.html" class="btn-list">🔍 ดูรายการทั้งหมด</a>
+                    <a href="index.html" class="btn-back">แจ้งเหตุใหม่</a>
+                    <a href="list.html" class="btn-list">ดูรายการทั้งหมด</a>
                 </div>
 
                 <h5 class="mb-3" style="color:#dc3545;">📋 รายการแจ้งเหตุทั้งหมด</h5>
 
-                <div id="loadingMsg" class="text-center text-muted py-4">⏳ กำลังโหลดข้อมูล...</div>
+                <div id="loadingMsg" class="text-center text-muted py-4">กำลังโหลดข้อมูล...</div>
 
                 <div class="table-wrapper" id="tableWrapper" style="display:none;">
                     <table class="table table-hover mb-0">
@@ -80,6 +80,7 @@
                                 <th>#</th>
                                 <th>หัวข้อ</th>
                                 <th>รายละเอียด</th>
+                                <th>ผู้แจ้ง</th>
                                 <th>สถานะปัจจุบัน</th>
                                 <th>เปลี่ยนสถานะ</th>
                             </tr>
@@ -96,7 +97,7 @@
         </div>
     </div>
 
-    <div id="toast">✅ อัปเดตสถานะเรียบร้อยแล้ว!</div>
+    <div id="toast">อัปเดตสถานะเรียบร้อยแล้ว!</div>
 
     <script src="assets/js/admin.js"></script>
 </body>

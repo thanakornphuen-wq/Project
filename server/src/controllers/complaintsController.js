@@ -27,17 +27,20 @@ exports.getById = async (req, res) => {
 exports.create = async (req, res) => {
     try {
         const image_url = req.file ? req.file.filename : null;
-        
-        // ดึง user_id และ category_id ออกมาจาก req.body
-        const { user_id, category_id, title, description, location, contact_phone } = req.body;
+        const { full_name, phone_number, title, description } = req.body;
+        const pool = require('../config/db');
+
+        // สร้าง user ใหม่ก่อน แล้วเอา id ไปใช้
+        const [userResult] = await pool.execute(
+            "INSERT INTO users (full_name, phone_number) VALUES (?, ?)",
+            [full_name, phone_number]
+        );
+        const user_id = userResult.insertId;
 
         const result = await Complaint.create({
             user_id,
-            category_id,
             title,
             description,
-            location,
-            contact_phone,
             image_url
         });
 
@@ -46,9 +49,9 @@ exports.create = async (req, res) => {
             id: result.insertId 
         });
     } catch (err) {
-    console.error("🔥 บักอยู่ตรงนี้เพื่อน!: ", err); // เพิ่มบรรทัดนี้!!!
-    res.status(500).json({ error: err.message });
-}
+        console.error("🔥 บักอยู่ตรงนี้เพื่อน!: ", err);
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // 4. อัปเดตสถานะ (ใหม่! สำหรับเจ้าหน้าที่)
@@ -82,11 +85,11 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, location, contact_phone } = req.body;
-        const pool = require('../config/db'); // ดึง pool มาใช้ตรงๆ
+        const { title, description } = req.body;
+        const pool = require('../config/db');
         
-        const sql = "UPDATE complaints SET title=?, description=?, location=?, contact_phone=? WHERE id=?";
-        const [result] = await pool.execute(sql, [title, description, location, contact_phone, id]);
+        const sql = "UPDATE complaints SET title=?, description=? WHERE id=?";
+        const [result] = await pool.execute(sql, [title, description, id]);
         
         if (result.affectedRows === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
         res.json({ message: "อัปเดตข้อมูลสำเร็จ" });

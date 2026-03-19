@@ -1,9 +1,9 @@
 const API_URL = "http://localhost:8000/complaints";
 
 const statusLabel = {
-    pending:    "⏳ รอดำเนินการ",
-    processing: "🔨 กำลังดำเนินการ",
-    resolved:   "✅ เสร็จสิ้น"
+    pending:    "รอดำเนินการ",
+    processing: "กำลังดำเนินการ",
+    resolved:   "เสร็จสิ้น"
 };
 
 async function loadComplaints() {
@@ -37,6 +37,7 @@ async function loadComplaints() {
                     <td>${index + 1}</td>
                     <td><strong>${item.title}</strong></td>
                     <td style="color:#666; font-size:0.9em;">${desc}</td>
+                    <td style="font-size:0.9em;">👤 ${item.full_name || '-'}<br>📞 ${item.phone_number || '-'}</td>
                     <td>
                         <span class="status-badge ${statusClass}">
                             ${statusLabel[item.status] || item.status}
@@ -44,13 +45,13 @@ async function loadComplaints() {
                     </td>
                     <td>
                         ${item.status !== "pending"
-                            ? `<button class="action-btn btn-pending" onclick="changeStatus(${item.id}, 'pending')">⏳ รอดำเนินการ</button>`
+                            ? `<button class="action-btn btn-pending" onclick="changeStatus(${item.id}, 'pending')">รอดำเนินการ</button>`
                             : ""}
                         ${item.status !== "processing"
-                            ? `<button class="action-btn btn-processing" onclick="changeStatus(${item.id}, 'processing')">🔨 กำลังทำ</button>`
+                            ? `<button class="action-btn btn-processing" onclick="changeStatus(${item.id}, 'processing')">กำลังทำ</button>`
                             : ""}
                         ${item.status !== "resolved"
-                            ? `<button class="action-btn btn-resolved" onclick="changeStatus(${item.id}, 'resolved')">✅ เสร็จสิ้น</button>`
+                            ? `<button class="action-btn btn-resolved" onclick="changeStatus(${item.id}, 'resolved')">เสร็จสิ้น</button>`
                             : ""}
                     </td>
                 </tr>`;

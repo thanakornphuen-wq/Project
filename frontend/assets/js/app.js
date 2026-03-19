@@ -25,39 +25,38 @@ async function sendComplaint() {
     const msgDiv = document.getElementById("responseMessage");
     const complaintForm = document.getElementById("complaintForm");
 
-    // ซ่อน message เก่าก่อน
     msgDiv.style.display = "none";
     msgDiv.innerHTML = "";
 
-    // ── 1. Validate ฝั่ง Frontend ก่อนส่งเลย ──
-    const title = document.getElementById("title").value.trim();
-    const description = document.getElementById("description").value.trim();
+    // ── 1. Validate ฝั่ง Frontend ──
+    const full_name    = document.getElementById("full_name").value.trim();
+    const phone_number = document.getElementById("phone_number").value.trim();
+    const title        = document.getElementById("title").value.trim();
+    const description  = document.getElementById("description").value.trim();
 
-    if (!title && !description) {
-        showMessage(msgDiv, "⚠️ กรุณากรอกหัวข้อเรื่องและรายละเอียดให้ครบก่อนส่ง", "error");
-        return;
+    if (!full_name) {
+        showMessage(msgDiv, "⚠️ กรุณากรอก ชื่อ-นามสกุล ให้ครบก่อนส่ง", "error"); return;
+    }
+    if (!phone_number) {
+        showMessage(msgDiv, "⚠️ กรุณากรอก เบอร์โทรติดต่อ ให้ครบก่อนส่ง", "error"); return;
     }
     if (!title) {
-        showMessage(msgDiv, "⚠️ กรุณากรอก หัวข้อเรื่อง ให้ครบก่อนส่ง", "error");
-        return;
+        showMessage(msgDiv, "⚠️ กรุณากรอก หัวข้อเรื่อง ให้ครบก่อนส่ง", "error"); return;
     }
     if (!description) {
-        showMessage(msgDiv, "⚠️ กรุณากรอก รายละเอียด ให้ครบก่อนส่ง", "error");
-        return;
+        showMessage(msgDiv, "⚠️ กรุณากรอก รายละเอียด ให้ครบก่อนส่ง", "error"); return;
     }
 
-    // ── 2. ล็อกปุ่มและเตรียมส่ง ──
+    // ── 2. ล็อกปุ่ม ──
     submitBtn.disabled = true;
     submitBtn.innerText = "⏳ กำลังส่งข้อมูล...";
 
     // ── 3. เตรียม FormData ──
     const formData = new FormData();
+    formData.append("full_name", full_name);
+    formData.append("phone_number", phone_number);
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("user_id", 1);
-    formData.append("category_id", 1);
-    formData.append("location", "กรุงเทพ");
-    formData.append("contact_phone", "0123456789");
 
     const imageFile = document.getElementById("image").files[0];
     if (imageFile) {
@@ -99,23 +98,5 @@ function showMessage(el, text, type) {
     el.innerHTML = text;
     el.className = `mt-3 ${type === "success" ? "msg-success" : "msg-error"}`;
     el.style.display = "block";
-    // scroll ขึ้นไปให้เห็น message
     el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
-// ผูก event ที่นี่แทน onclick inline ใน HTML — ป้องกัน form submit ได้แน่นอนกว่า
-document.addEventListener("DOMContentLoaded", function () {
-    const btn = document.getElementById("submitBtn");
-    if (btn) {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            sendComplaint();
-        });
-    }
-
-    const form = document.getElementById("complaintForm");
-    if (form) {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-        });
-    }
-});

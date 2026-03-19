@@ -24,17 +24,18 @@
         <h1>📋 รายการแจ้งเหตุทั้งหมด</h1>
         
         <div style="margin: 10px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <a href="index.html" class="btn" style="background-color: #28a745; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px;">➕ แจ้งเหตุใหม่</a>
+            <a href="index.html" class="btn" style="background-color: #28a745; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px;">แจ้งเหตุใหม่</a>
             <a href="admin.html" class="btn" style="background-color: #dc3545; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px;">🛠️ จัดการ Admin</a>
 
             <div style="display: flex; gap: 10px; flex-grow: 1; justify-content: flex-end;">
-                <input type="text" id="searchInput" placeholder="🔍 ค้นหาหัวข้อหรือสถานที่..." 
+                <input type="text" id="searchInput" placeholder="ค้นหาหัวข้อ..." 
                        style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 250px;">
                 
                 <select id="statusFilter" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
                     <option value="all">ทั้งหมด</option>
                     <option value="pending">รอดำเนินการ</option>
-                    <option value="resolved">แก้ไขแล้ว</option>
+                    <option value="processing">กำลังดำเนินการ</option>
+                    <option value="resolved">เสร็จสิ้น</option>
                 </select>
             </div>
         </div>
@@ -44,16 +45,14 @@
                 <thead>
                     <tr>
                         <th>ลำดับ</th>
-                        <th>หัวข้อ/รายละเอียด</th>
-                        <th>สถานที่</th>
-                        <th>หมวดหมู่</th>
+                        <th>หัวข้อ/รายละเอียด/ผู้แจ้ง</th>
                         <th>สถานะ</th>
                         <th>รูปภาพ</th>
                     </tr>
                 </thead>
                 <tbody id="complaintList">
                     <tr>
-                        <td colspan="6" style="text-align: center;">กำลังโหลดข้อมูล...</td>
+                        <td colspan="4" style="text-align: center;">กำลังโหลดข้อมูล...</td>
                     </tr>
                 </tbody>
             </table>
