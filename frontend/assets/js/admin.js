@@ -80,7 +80,7 @@ async function changeStatus(id, newStatus) {
     });
 
     if (res.ok) {
-      showToast(`✅ เปลี่ยนเป็น "${statusLabel[newStatus]}" แล้ว!`);
+      showToast(`เปลี่ยนเป็น "${statusLabel[newStatus]}" แล้ว!`);
       loadComplaints(); // โหลดตารางใหม่
     } else {
       showToast("❌ อัปเดตไม่สำเร็จ", true);
@@ -93,7 +93,7 @@ async function changeStatus(id, newStatus) {
 function showToast(msg, isError = false) {
   const toast = document.getElementById("toast");
   toast.textContent = msg;
-  toast.style.background = isError ? "#dc3545" : "#28a745";
+  toast.style.background = isError ? "#dc3545" : "#28a733";
   toast.style.display = "block";
   setTimeout(() => {
     toast.style.display = "none";
@@ -109,7 +109,7 @@ async function deleteComplaint(id) {
     const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
 
     if (res.ok) {
-      showToast("🗑️ ลบรายการเรียบร้อยแล้ว!");
+      showToast("ลบรายการเรียบร้อยแล้ว!");
       loadComplaints();
     } else {
       showToast("❌ ลบไม่สำเร็จ", true);

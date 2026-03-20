@@ -1,160 +1,446 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>รายการแจ้งเหตุ - ระบบเมืองน่าอยู่</title>
-    <link rel="stylesheet" href="assets/css/style.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายการแจ้งเหตุ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-      /* แถม CSS เฉพาะหน้าตารางให้ครับ */
-      .table-container {
-        margin: 20px auto;
-        max-width: 95%;
-        overflow-x: auto;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: white;
-        border: 1px solid #ddd;
-      }
-      th,
-      td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-      th {
-        background-color: #007bff;
-        color: white;
-      }
-      tr:hover {
-        background-color: #f5f5f5;
-      }
-      .btn-action {
-        color: white !important;
-        text-decoration: none;
-        padding: 8px 15px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        display: inline-block;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s;
-      }
-      .btn-action:hover {
-        color: white !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      }
-      .btn-green {
-        background-color: #28a745;
-      }
-      .btn-green:hover {
-        background-color: #1e7e34;
-      }
-      .btn-red {
-        background-color: #dc3545;
-      }
-      .btn-red:hover {
-        background-color: #a71d2a;
-      }
-      .badge {
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
-        text-transform: uppercase;
-      }
-      .pending {
-        background-color: #ffc107;
-        color: #000;
-      }
-      .processing {
-        background-color: #17a2b8;
-        color: #fff;
-      }
-      .resolved {
-        background-color: #28a745;
-        color: #fff;
-      }
-      .img-preview {
-        width: 80px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>📋 รายการแจ้งเหตุทั้งหมด</h1>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      <div
-        style="
-          margin: 10px 0;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 10px;
-        "
-      >
-        <a href="index.html" class="btn-action btn-green">แจ้งเหตุใหม่</a>
-        <a href="admin.html" class="btn-action btn-red">จัดการ Admin</a>
+        :root {
+            --navy: #0f172a;
+            --navy2: #1e293b;
+            --navy3: #334155;
+            --accent: #3b82f6;
+            --accent2: #60a5fa;
+            --surface: #ffffff;
+            --surface2: #f8fafc;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text2: #475569;
+            --text3: #94a3b8;
+            --pending-bg: #fefce8; --pending-text: #854d0e; --pending-border: #fde047;
+            --processing-bg: #eff6ff; --processing-text: #1d4ed8; --processing-border: #93c5fd;
+            --resolved-bg: #f0fdf4; --resolved-text: #166534; --resolved-border: #86efac;
+        }
 
-        <div
-          style="
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: var(--surface2);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1e40af 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 52px 0 90px;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse 600px 350px at 85% 50%, rgba(59,130,246,0.1) 0%, transparent 70%);
+        }
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+        .hero-inner {
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .hero-left {}
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(59,130,246,0.15);
+            border: 1px solid rgba(59,130,246,0.3);
+            color: var(--accent2);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 100px;
+            margin-bottom: 14px;
+        }
+        .hero-badge::before { content: '●'; font-size: 0.5rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .hero h1 {
+            font-family: 'Prompt', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        .hero p {
+            color: #94a3b8;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+        .hero-actions {
             display: flex;
             gap: 10px;
-            flex-grow: 1;
-            justify-content: flex-end;
-          "
-        >
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="ค้นหาหัวข้อ..."
-            style="
-              padding: 8px;
-              border: 1px solid #ddd;
-              border-radius: 5px;
-              width: 250px;
-            "
-          />
+            flex-wrap: wrap;
+        }
+        .btn-hero {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,130,246,0.35); color: white; }
+        .btn-outline {
+            background: rgba(255,255,255,0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .btn-outline:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); color: white; }
 
-          <select
-            id="statusFilter"
-            style="padding: 8px; border: 1px solid #ddd; border-radius: 5px"
-          >
-            <option value="all">ทั้งหมด</option>
-            <option value="pending">รอดำเนินการ</option>
-            <option value="processing">กำลังดำเนินการ</option>
-            <option value="resolved">เสร็จสิ้น</option>
-          </select>
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            max-width: 1100px;
+            margin: -40px auto 60px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+        .stat-card.all
+        .stat-card.pending
+        .stat-card.proc
+        .stat-card.done
+
+        /* ===== TOOLBAR ===== */
+        .toolbar {
+            background: white;
+            border-radius: 16px;
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
+        }
+        .search-wrap {
+            width: 100%;
+            position: relative;
+        }
+        .search-wrap svg {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            width: 16px; height: 16px; color: var(--text3);
+        }
+        #searchInput {
+            width: 100%;
+            padding: 10px 12px 10px 38px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.2s;
+            background: var(--surface2);
+            color: var(--text);
+        }
+        #searchInput:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+        .filter-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding-top: 4px;
+            border-top: 1px solid var(--border);
+        }
+        .pill {
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1.5px solid var(--border);
+            background: white;
+            color: var(--text2);
+            transition: all 0.15s;
+            font-family: 'Sarabun', sans-serif;
+        }
+        .pill:hover { border-color: var(--accent); color: var(--accent); }
+        .pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+        /* ===== CARDS ===== */
+        #cardGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .complaint-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            transition: all 0.25s;
+            animation: fadeUp 0.4s ease both;
+        }
+        .complaint-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            border-color: #cbd5e1;
+        }
+        @keyframes fadeUp {
+            from { opacity:0; transform: translateY(16px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+        .card-img-wrap {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            overflow: hidden;
+            position: relative;
+        }
+        .card-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+        .complaint-card:hover .card-img-wrap img { transform: scale(1.04); }
+        .card-no-img {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: var(--text3);
+            font-size: 2rem;
+            gap: 6px;
+        }
+        .card-no-img span { font-size: 0.75rem; font-weight: 500; }
+        .card-body { padding: 18px; }
+        .card-status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            border: 1.5px solid;
+        }
+        .status-pill.pending    { background: var(--pending-bg);    color: var(--pending-text);    border-color: var(--pending-border); }
+        .status-pill.processing { background: var(--processing-bg); color: var(--processing-text); border-color: var(--processing-border); }
+        .status-pill.resolved   { background: var(--resolved-bg);   color: var(--resolved-text);   border-color: var(--resolved-border); }
+        .card-num {
+            font-size: 0.72rem;
+            color: var(--text3);
+            font-weight: 600;
+            background: var(--surface2);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        .card-title {
+            font-family: 'Prompt', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text2);
+            line-height: 1.6;
+            margin-bottom: 14px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-footer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        .avatar {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--accent) 0%, #6366f1 100%);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .card-meta { flex: 1; }
+        .card-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+        .card-phone { font-size: 0.75rem; color: var(--text3); }
+
+        /* ===== EMPTY / LOADING ===== */
+        .state-box {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text3);
+        }
+        .state-box .icon { font-size: 3rem; margin-bottom: 12px; }
+        .state-box p { font-size: 0.95rem; }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 100px; }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+        <div class="hero-left">
+            <div class="hero-badge">ระบบแจ้งปัญหาเมือง</div>
+            <h1>รายการแจ้งเหตุ<br>ทั้งหมด</h1>
+            <p>ติดตามสถานะปัญหาจากประชาชน</p>
         </div>
-      </div>
+        <div class="hero-actions">
+            <a href="index.html" class="btn-hero btn-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                แจ้งเหตุใหม่
+            </a>
+            <a href="admin.html" class="btn-hero btn-outline">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                จัดการ Admin
+            </a>
+        </div>
+    </div>
+</div>
 
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>ลำดับ</th>
-              <th>หัวข้อ/รายละเอียด/ผู้แจ้ง</th>
-              <th>สถานะ</th>
-              <th>รูปภาพ</th>
-            </tr>
-          </thead>
-          <tbody id="complaintList">
-            <tr>
-              <td colspan="4" style="text-align: center">กำลังโหลดข้อมูล...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<div class="main">
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" placeholder="ค้นหาหัวข้อ ชื่อ หรือเบอร์...">
+        </div>
+        <div class="filter-pills">
+            <button class="pill active" data-status="all">ทั้งหมด</button>
+            <button class="pill" data-status="pending">รอดำเนินการ</button>
+            <button class="pill" data-status="processing">กำลังทำ</button>
+            <button class="pill" data-status="resolved">เสร็จสิ้น</button>
+        </div>
     </div>
 
-    <script src="assets/js/list.js"></script>
-  </body>
+    <!-- Cards -->
+    <div id="cardGrid">
+        <div class="state-box"><div class="icon">⏳</div><p>กำลังโหลดข้อมูล...</p></div>
+    </div>
+
+</div>
+
+<script src="assets/js/list.js"></script>
+<script>
+    // override renderTable ให้แสดงเป็น card แทนตาราง
+    const API_URL_BASE = 'http://localhost:8000';
+    const _statusLabel = { pending:'รอดำเนินการ', processing:'กำลังดำเนินการ', resolved:'เสร็จสิ้น' };
+
+    function renderTable(data) {
+        const grid = document.getElementById('cardGrid');
+        grid.innerHTML = '';
+
+        if (data.length === 0) {
+            grid.innerHTML = '<div class="state-box"><div class="icon">🔍</div><p>ไม่พบข้อมูลที่ตรงกัน</p></div>';
+            return;
+        }
+
+        data.forEach((item, i) => {
+            const imgUrl = item.image_url ? `${API_URL_BASE}/uploads/${item.image_url}` : null;
+            const initial = item.full_name ? item.full_name.charAt(0) : '?';
+            const card = document.createElement('div');
+            card.className = 'complaint-card';
+            card.style.animationDelay = `${i * 0.05}s`;
+            card.innerHTML = `
+                <div class="card-img-wrap">
+                    ${imgUrl
+                        ? `<a href="${imgUrl}" target="_blank"><img src="${imgUrl}" alt="รูปแจ้งเหตุ"></a>`
+                        : `<div class="card-no-img"><span>ไม่มีรูปภาพ</span></div>`}
+                </div>
+                <div class="card-body">
+                    <div class="card-status-row">
+                        <span class="status-pill ${item.status}">${_statusLabel[item.status] || item.status}</span>
+                        <span class="card-num">#${String(item.id).padStart(3,'0')}</span>
+                    </div>
+                    <div class="card-title">${item.title}</div>
+                    <div class="card-desc">${item.description}</div>
+                    <div class="card-footer">
+                        <div class="avatar">${initial}</div>
+                        <div class="card-meta">
+                            <div class="card-name">${item.full_name || '-'}</div>
+                            <div class="card-phone">📞 ${item.phone_number || '-'}</div>
+                        </div>
+                    </div>
+                </div>`;
+            grid.appendChild(card);
+        });
+    }
+
+    // pill filter
+    document.querySelectorAll('.pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            const status = pill.dataset.status;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            applyFilters(status, search);
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', e => {
+        const status = document.querySelector('.pill.active')?.dataset.status || 'all';
+        applyFilters(status, e.target.value.toLowerCase());
+    });
+
+    function applyFilters(status, search) {
+        let result = allData;
+        if (status !== 'all') result = result.filter(i => i.status === status);
+        if (search) result = result.filter(i =>
+            i.title.toLowerCase().includes(search) ||
+            i.description.toLowerCase().includes(search) ||
+            (i.full_name && i.full_name.toLowerCase().includes(search)) ||
+            (i.phone_number && i.phone_number.toLowerCase().includes(search))
+        );
+        renderTable(result);
+    }
+</script>
+</body>
 </html>
