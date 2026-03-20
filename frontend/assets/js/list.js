@@ -69,21 +69,23 @@ function renderTable(dataToRender) {
   });
 }
 
-// ✅ ระบบค้นหา (พิมพ์ปุ๊บ กรองปั๊บ)
+
 document.getElementById("searchInput")?.addEventListener("input", (e) => {
   const searchText = e.target.value.toLowerCase();
 
   const filteredData = allData.filter(
     (item) =>
       item.title.toLowerCase().includes(searchText) ||
-      item.location.toLowerCase().includes(searchText) ||
-      item.description.toLowerCase().includes(searchText),
+      item.description.toLowerCase().includes(searchText) ||
+      (item.full_name && item.full_name.toLowerCase().includes(searchText)) ||
+      (item.phone_number &&
+        item.phone_number.toLowerCase().includes(searchText)),
   );
 
   renderTable(filteredData); // วาดตารางใหม่ด้วยข้อมูลที่กรองแล้ว
 });
 
-// ✅ ระบบกรองสถานะ
+
 document.getElementById("statusFilter")?.addEventListener("change", (e) => {
   const selectedStatus = e.target.value.toLowerCase();
 
