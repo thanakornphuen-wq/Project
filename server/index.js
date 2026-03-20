@@ -6,7 +6,6 @@ const port = process.env.PORT || 8000;
 
 app.listen(port, async () => {
   try {
-    // ทดสอบการเชื่อมต่อ Database เฉยๆ ว่าต่อติดไหม
     const connection = await pool.getConnection();
     console.log("✅ Database connected successfully!");
     connection.release(); // คืนการเชื่อมต่อกลับเข้า Pool

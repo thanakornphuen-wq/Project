@@ -5,7 +5,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-//เพื่อให้โปรเจคเข้าถึงไฟล์ในโฟลเดอร์ uploads ได้
+
 app.use('/uploads', express.static('uploads'));
 app.use('/complaints', require('./routes/complaints'));
 app.use(express.json({ limit: '10mb' })); 

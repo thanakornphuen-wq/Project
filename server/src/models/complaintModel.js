@@ -1,4 +1,4 @@
-const db = require('../config/db'); // นี่คือตัว pool ที่เรา export มา
+const db = require('../config/db'); 
 const pool = require('../config/db');
 
 const Complaint = {

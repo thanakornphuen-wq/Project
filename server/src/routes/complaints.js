@@ -4,7 +4,7 @@ const controller = require('../controllers/complaintsController');
 const validateComplaint = require('../middlewares/validateComplaint');
 const upload = require('../middlewares/uploadMiddleware');
 
-router.get('/', controller.getAll);  // ดึงข้อมูลทั้งหมด
+router.get('/', controller.getAll);  
 router.get('/:id', controller.getById);//ประชาชนใช้ติดตามสถานะเรื่องของตัวเอง
 router.delete('/:id', controller.delete); // ใช้ DELETE สำหรับลบ
 router.post('/', upload.single('image'), validateComplaint, controller.create);//ประชาชนแจ้งเรื่อง

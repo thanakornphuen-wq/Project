@@ -1,5 +1,5 @@
 const API_URL = "http://localhost:8000";
-let allData = []; // ✅ ประกาศไว้ข้างนอกเพื่อเก็บข้อมูลทั้งหมดไว้ใช้ค้นหา
+let allData = []; // ประกาศไว้ข้างนอกเพื่อเก็บข้อมูลทั้งหมดไว้ใช้ค้นหา
 
 async function loadComplaints() {
   try {
@@ -9,8 +9,8 @@ async function loadComplaints() {
       throw new Error("เรียกข้อมูลไม่สำเร็จ");
     }
 
-    allData = await response.json(); // ✅ เก็บข้อมูลที่ได้ลงใน allData
-    renderTable(allData); // ✅ เรียกฟังก์ชันวาดตารางโดยส่งข้อมูลทั้งหมดเข้าไป
+    allData = await response.json(); // เก็บข้อมูลที่ได้ลงใน allData
+    renderTable(allData); // เรียกฟังก์ชันวาดตารางโดยส่งข้อมูลทั้งหมดเข้าไป
   } catch (error) {
     console.error("Error:", error);
     const tableBody = document.getElementById("complaintList");
@@ -97,5 +97,5 @@ document.getElementById("statusFilter")?.addEventListener("change", (e) => {
   renderTable(filteredData);
 });
 
-// เรียกใช้งานครั้งแรก
+
 loadComplaints();

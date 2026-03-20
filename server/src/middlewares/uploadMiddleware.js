@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// กรองเฉพาะไฟล์รูปภาพ
+
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);

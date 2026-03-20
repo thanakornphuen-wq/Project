@@ -1,6 +1,5 @@
 const API_URL = "http://localhost:8000";
 
-// ผูก event listener หลัง DOM โหลดเสร็จ (ปลอดภัยกว่า onclick ใน HTML)
 document.addEventListener("DOMContentLoaded", () => {
     const submitBtn = document.getElementById("submitBtn");
     if (submitBtn) {
@@ -10,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // กัน form submit ด้วย Enter หรือ Go Live trigger
+    // กัน form submit ด้วย Enter 
     const form = document.getElementById("complaintForm");
     if (form) {
         form.addEventListener("submit", (e) => {
@@ -47,9 +46,9 @@ async function sendComplaint() {
         showMessage(msgDiv, "⚠️ กรุณากรอก รายละเอียด ให้ครบก่อนส่ง", "error"); return;
     }
 
-    // ── 2. ล็อกปุ่ม ──
+
     submitBtn.disabled = true;
-    submitBtn.innerText = "⏳ กำลังส่งข้อมูล...";
+    submitBtn.innerText = " กำลังส่งข้อมูล...";
 
     // ── 3. เตรียม FormData ──
     const formData = new FormData();
@@ -67,33 +66,33 @@ async function sendComplaint() {
         const response = await fetch(`${API_URL}/complaints`, {
             method: "POST",
             body: formData,
-            // ห้ามใส่ Content-Type Header เด็ดขาดเมื่อใช้ FormData
+
         });
 
         // อ่าน response body ทุกกรณี
         const result = await response.json().catch(() => null);
 
         if (response.ok) {
-            // ✅ สำเร็จ: โชว์แถบเขียวค้างไว้ ไม่รีเฟรช
+           
             showMessage(msgDiv, "✅ ส่งข้อมูลแจ้งเหตุสำเร็จแล้ว!", "success");
             complaintForm.reset();
         } else {
-            // ❌ ดึง error message จาก server มาแสดงตรงๆ
+            
             const errMsg = result?.error || result?.message || "ส่งข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง";
             showMessage(msgDiv, `❌ ${errMsg}`, "error");
         }
     } catch (err) {
-        // ⚠️ ติดต่อเซิร์ฟเวอร์ไม่ได้
+        
         console.error("Error:", err);
         showMessage(msgDiv, "⚠️ เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (เปิด Backend หรือยัง?)", "error");
     } finally {
-        // คืนค่าปุ่มเสมอ
+        
         submitBtn.disabled = false;
         submitBtn.innerText = "ส่งข้อมูลแจ้งเหตุ";
     }
 }
 
-// ── Helper: แสดง message แบบ reusable ──
+
 function showMessage(el, text, type) {
     el.innerHTML = text;
     el.className = `mt-3 ${type === "success" ? "msg-success" : "msg-error"}`;
